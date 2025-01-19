@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Paper,
   Typography,
-  CircularProgress,
   Button,
   Dialog,
   DialogTitle,
@@ -23,7 +22,9 @@ import {
   useGetBookByIdQuery,
   useGetUsersQuery,
   useBorrowBookMutation,
-} from "../store/apis/library-api";
+} from "@/store/apis/library-api";
+import LoadingSpinner from "@/components/loading-spinner";
+import ErrorAlert from "@/components/error-alert";
 
 export const BookDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -36,22 +37,9 @@ export const BookDetailsPage = () => {
   const { data: users, isLoading: isLoadingUsers } = useGetUsersQuery();
   const [borrowBook, { isLoading: isBorrowing }] = useBorrowBookMutation();
 
-  // Loading state for initial book data
-  if (isLoadingBook) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (!book) {
-    return (
-      <Alert severity="error" sx={{ maxWidth: 500, mx: "auto", mt: 4 }}>
-        Book not found
-      </Alert>
-    );
-  }
+  // Loading and error states
+  if (isLoadingBook) return <LoadingSpinner />;
+  if (!book) return <ErrorAlert message="Book not Found" />;
 
   const handleBorrow = async () => {
     try {

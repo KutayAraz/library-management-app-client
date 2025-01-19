@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import {
   Paper,
   Typography,
-  CircularProgress,
   Divider,
   List,
   ListItem,
@@ -14,6 +13,8 @@ import {
 import { useGetUserByIdQuery, useReturnBookMutation } from "@/store/apis/library-api";
 import { ReturnBookDialog } from "@/components/return-book-dialog";
 import { BorrowedBook } from "@/types";
+import ErrorAlert from "@/components/error-alert";
+import LoadingSpinner from "@/components/loading-spinner";
 
 export const UserDetailsPage = () => {
   // State management for the return book dialog
@@ -28,21 +29,14 @@ export const UserDetailsPage = () => {
   const { data: user, isLoading, error: fetchError } = useGetUserByIdQuery(Number(id));
   const [returnBook, { isLoading: isReturning }] = useReturnBookMutation();
 
-  // Loading state
-  if (isLoading) {
-    return (
-      <div style={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
-        <CircularProgress />
-      </div>
-    );
-  }
+  // Loading and error states
+  if (isLoading) return <LoadingSpinner />;
 
   // Error state
-  if (fetchError || !user) {
+  if (fetchError || !user)
     return (
-      <Alert severity="error">{fetchError ? "Error loading user details" : "User not found"}</Alert>
+      <ErrorAlert message={`${fetchError ? "Error loading user details" : "User not found"}`} />
     );
-  }
 
   const handleReturnBook = async (score: number) => {
     if (!selectedBook) return;
