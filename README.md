@@ -20,6 +20,17 @@ A modern React application for managing library books and user borrowing. Built 
 - Material UI v6 for components
 - Vite for build tooling
 
+## Environment Configuration
+
+This project uses environment variables for configuration. You'll need to set up the appropriate `.env` files before running the application.
+
+1. Create the following files in your project root:
+
+   - `.env.development` - Development environment variables
+   - `.env.production` - Production environment variables
+
+2. Use the provided `.env.example` as a template
+
 ## Getting Started
 
 1. Clone the repository
